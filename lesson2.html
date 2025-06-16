@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Online Learning Platform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f7fa;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .lesson-list a {
+      font-weight: bold;
+      font-size: 18px;
+      color: #2980b9;
+      text-decoration: none;
+    }
+    .lesson-list span {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+    .quiz {
+      margin-top: 30px;
+    }
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>📘 Online Learning Platform</h1>
+
+  <div id="mainMenu">
+    <div class="lesson-list">
+      <p><a href="#" onclick="showLesson()">Lesson 1: HTML Basics</a> <span id="progress-lesson1"></span></p>
+    </div>
+  </div>
+
+  <!-- Lesson Section -->
+  <div id="lessonSection" class="hidden">
+    <h2>Lesson 1: HTML Basics</h2>
+    <p>In this lesson, you'll learn the structure of a basic HTML page.</p>
+    <video controls width="500">
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    </video>
+    <br><br>
+    <button onclick="completeLesson()">✅ Mark as Complete</button>
+    <button onclick="showQuiz()">Next: Quiz</button>
+  </div>
+
+  <!-- Quiz Section -->
+  <div id="quizSection" class="hidden quiz">
+    <h2>Quiz 1: HTML Basics</h2>
+    <form id="quizForm">
+      <p>1. What does HTML stand for?</p>
+      <input type="radio" name="q1" value="a"> Hyper Text Makeup Language<br>
+      <input type="radio" name="q1" value="b"> Hyperlinks and Text Markup Language<br>
+      <input type="radio" name="q1" value="c"> Hyper Text Markup Language<br><br>
+      <button type="submit">Submit Quiz</button>
+    </form>
+    <div id="quizResult" class="result"></div>
+    <br>
+    <button onclick="goHome()">🏠 Back to Home</button>
+  </div>
+
+  <script>
+    // Show progress on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      const status = localStorage.getItem("lesson1");
+      document.getElementById("progress-lesson1").textContent =
+        status === "completed" ? "✅ Completed" : "❌ Not Started";
+    });
+
+    // Show lesson
+    function showLesson() {
+      document.getElementById("mainMenu").classList.add("hidden");
+      document.getElementById("lessonSection").classList.remove("hidden");
+    }
+
+    // Mark lesson complete
+    function completeLesson() {
+      localStorage.setItem("lesson1", "completed");
+      alert("Lesson marked as complete!");
+      document.getElementById("progress-lesson1").textContent = "✅ Completed";
+    }
+
+    // Show quiz
+    function showQuiz() {
+      document.getElementById("lessonSection").classList.add("hidden");
+      document.getElementById("quizSection").classList.remove("hidden");
+    }
+
+    // Handle quiz submission
+    const quizForm = document.getElementById("quizForm");
+    quizForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const answer = document.querySelector('input[name="q1"]:checked');
+      const resultDiv = document.getElementById("quizResult");
+      if (answer && answer.value === "c") {
+        resultDiv.textContent = "✅ Correct!";
+        resultDiv.style.color = "green";
+        localStorage.setItem("quiz1_score", "1");
+      } else {
+        resultDiv.textContent = "❌ Incorrect. Try again.";
+        resultDiv.style.color = "red";
+        localStorage.setItem("quiz1_score", "0");
+      }
+    });
+
+    function goHome() {
+      document.getElementById("quizSection").classList.add("hidden");
+      document.getElementById("mainMenu").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
+
